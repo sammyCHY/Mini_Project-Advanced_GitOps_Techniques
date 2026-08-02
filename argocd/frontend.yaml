@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: frontend
+  namespace: argocd
+
+spec:
+  project: gitops-project
+
+  source:
+    repoURL: https://github.com/<YOUR_GITHUB_USERNAME>/gitops-project.git
+    targetRevision: main
+    path: kubernetes/overlays/dev/frontend
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gitops-dev
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

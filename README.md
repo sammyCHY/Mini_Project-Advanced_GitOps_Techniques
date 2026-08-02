@@ -32,6 +32,57 @@ Develop proficiency in deploying applications across multiple Kubernetes cluster
 
      - Code Snippet:
 
+        There are several ways to create separate **Amazon EKS** clusters for **development** and **production**. The recommended approach is to create two **independent EKS clusters** one for each environment.
+
+        In this task I prefer to use `eksctl` for this task.
+    below is the command to create **development cluster**
+```
+eksctl create cluster \
+  --name dev-cluster \
+  --region us-east-1 \
+  --version 1.33 \
+  --nodegroup-name dev-workers \
+  --node-type t3.medium \
+  --nodes 2 \
+  --nodes-min 2 \
+  --nodes-max 4 \
+  --managed
+```
+    Create the production cluster:
+
+![The Image here shows the creation of dev-cluster on amazon eks](image/dev-cluster.png)
+
+
+```
+eksctl create cluster \
+  --name prod-cluster \
+  --region us-east-1 \
+  --version 1.33 \
+  --nodegroup-name prod-workers \
+  --node-type t3.medium \
+  --nodes 3 \
+  --nodes-min 3 \
+  --nodes-max 6 \
+  --managed
+```
+
+![The Image here shows the creation of prod-cluster on amazon eks](image/prod-cluster.png)
+
+
+Use this command below to verify the creation of the two clusters.
+
+```
+eksctl get clusters
+```
+
+
+![The Image shows the creation of clusters](image/eksctl-get-clusters.png)
+
+
+
+![The Image shows the kubectl config get-contexts](image/kubectl-config-get-contexts.png)
+
+
 ```
 argocd cluster add CONTEXT_NAME
 ```
@@ -65,7 +116,111 @@ spec:
     targetRevision: HEAD
 ```
 
+
+    Here is the structure for this project.
+
+```
+    gitops-project/
+│
+├── application/
+│   ├── frontend/
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   ├── server.js
+│   │   └── .dockerignore
+│   │
+│   └── user-service/
+│       ├── Dockerfile
+│       ├── package.json
+│       ├── server.js
+│       └── .dockerignore
+│
+├── kubernetes/
+│   ├── frontend/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   ├── configmap.yaml
+│   │   ├── namespace.yaml
+│   │   └── kustomization.yaml
+│   │
+│   └── user-service/
+│       ├── deployment.yaml
+│       ├── service.yaml
+│       ├── configmap.yaml
+│       ├── namespace.yaml
+│       └── kustomization.yaml
+│
+├── argocd/
+│   ├── frontend-app.yaml
+│   ├── user-app.yaml
+│   └── project.yaml
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+└── README.md
+```
+
    - Explanation: This defines an ArgoCD application for a production environment, pointing to the `prod` directory in the Git Repository.
+
+After the first stage based of the project structure, below is the next stage, the directory structure will look like this:
+
+```
+kubernetes/
+│
+├── base/
+│   ├── frontend/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   ├── configmap.yaml
+│   │   └── kustomization.yaml
+│   │
+│   └── user-service/
+│       ├── deployment.yaml
+│       ├── service.yaml
+│       ├── configmap.yaml
+│       └── kustomization.yaml
+│
+└── overlays/
+    ├── dev/
+    │   ├── frontend/
+    │   │   ├── kustomization.yaml
+    │   │   ├── replica-patch.yaml
+    │   │   └── image-patch.yaml
+    │   │
+    │   └── user-service/
+    │       ├── kustomization.yaml
+    │       ├── replica-patch.yaml
+    │       └── image-patch.yaml
+    │
+    └── prod/
+        ├── frontend/
+        │   ├── kustomization.yaml
+        │   ├── replica-patch.yaml
+        │   └── image-patch.yaml
+        │
+        └── user-service/
+            ├── kustomization.yaml
+            ├── replica-patch.yaml
+            └── image-patch.yaml
+```
+
+Below is the command to create the kubernetes directory above.
+
+```
+mkdir -p kubernetes/base/frontend
+mkdir -p kubernetes/base/user-service
+
+mkdir -p kubernetes/overlays/dev/frontend
+mkdir -p kubernetes/overlays/dev/user-service
+
+mkdir -p kubernetes/overlays/prod/frontend
+mkdir -p kubernetes/overlays/prod/user-service
+```
+
+![The Image here shows the creation of kubernetes directories](image/kubernetes-directories.png)
+
 
 3. **Managing Microservices:**
 
@@ -123,7 +278,7 @@ Learn to effectively integrate ArgoCD into a CI/CD pipeline, automating the depl
 
        - Set up the CI pipeline to automate building your application. This typically involves compiling code, running tests, and building Docker images.
 
-       - Configure the Pipeline to push the built Docker image to a container registry (like Docker Hub oe AWS ECR).
+       - Configure the Pipeline to push the built Docker image to a container registry (like Docker Hub or AWS ECR).
 
        - Example using GitHub Actions:
 
@@ -143,7 +298,7 @@ jobs:
       run: docker push my-app:latest
 ```
 
-- Explanation: This GitHub Actions workflow is trigegered on Pushes to the main branch, builds a Docker image, and then pushes it to a container registry.
+- Explanation: This GitHub Actions workflow is triggered on Pushes to the main branch, builds a Docker image, and then pushes it to a container registry.
 
 
 2. **Integrate ArgoCD:**
@@ -203,7 +358,7 @@ Real-world case studies provide valuable insights into how organizations impleme
 
    - **Focus Areas:**
 
-    - Examine the architecture of each case study. Lokk for how ArgoCD is integrated into the organization's CI/CD Pipeline.
+    - Examine the architecture of each case study. Look for how ArgoCD is integrated into the organization's CI/CD Pipeline.
 
     - Identify challenges faced by the organizations and how ArgoCD addressed those challenges.
 
