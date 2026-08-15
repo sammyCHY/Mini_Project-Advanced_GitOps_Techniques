@@ -1,0 +1,223 @@
+name: Build, Push and Update GitOps
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  DEV_CLUSTER: dev-cluster
+  PROD_CLUSTER: prod-cluster
+
+permissions:
+  contents: write
+
+jobs:
+
+  build-and-push:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------------------------
+      # 1. Checkout source code
+      # --------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      # --------------------------------------------------
+      # 2. Configure AWS credentials
+      # --------------------------------------------------
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+
+      # --------------------------------------------------
+      # 3. Verify AWS / EKS access
+      # --------------------------------------------------
+      - name: Verify AWS identity
+        run: |
+          aws sts get-caller-identity
+
+      - name: Verify EKS clusters
+        run: |
+          aws eks describe-cluster \
+            --name $DEV_CLUSTER \
+            --region $AWS_REGION \
+            --query 'cluster.status' \
+            --output text
+
+          aws eks describe-cluster \
+            --name $PROD_CLUSTER \
+            --region $AWS_REGION \
+            --query 'cluster.status' \
+            --output text
+
+
+      # --------------------------------------------------
+      # 4. Login to Docker Hub
+      # --------------------------------------------------
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+      # --------------------------------------------------
+      # 5. Build frontend image
+      # --------------------------------------------------
+      - name: Build frontend image
+        run: |
+          docker build \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }} \
+            ./microservices/frontend
+
+
+      # --------------------------------------------------
+      # 6. Push frontend image
+      # --------------------------------------------------
+      - name: Push frontend image
+        run: |
+          docker push \
+            ${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }}
+
+
+      # --------------------------------------------------
+      # 7. Build backend image
+      # --------------------------------------------------
+      - name: Build backend image
+        run: |
+          docker build \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ github.sha }} \
+            ./microservices/backend
+
+
+      # --------------------------------------------------
+      # 8. Push backend image
+      # --------------------------------------------------
+      - name: Push backend image
+        run: |
+          docker push \
+            ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ github.sha }}
+
+
+      # --------------------------------------------------
+      # 9. Install Kustomize
+      # --------------------------------------------------
+      - name: Install Kustomize
+        run: |
+          curl -sL \
+            https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_v5.7.1_linux_amd64.tar.gz \
+            -o kustomize.tar.gz
+
+          tar -xzf kustomize.tar.gz
+
+          sudo mv kustomize /usr/local/bin/kustomize
+
+          kustomize version
+
+
+      # --------------------------------------------------
+      # 10. Update frontend DEV image
+      # --------------------------------------------------
+      - name: Update frontend DEV image
+        run: |
+          cd kubernetes/frontend/overlays/dev
+
+          kustomize edit set image \
+            ${{ secrets.DOCKERHUB_USERNAME }}/gitops-frontend=${{ secrets.DOCKERHUB_USERNAME }}/gitops-frontend:${{ github.sha }}
+
+
+      # --------------------------------------------------
+      # 11. Update frontend PROD image
+      # --------------------------------------------------
+      - name: Update frontend PROD image
+        run: |
+          cd kubernetes/frontend/overlays/prod
+
+          kustomize edit set image \
+            ${{ secrets.DOCKERHUB_USERNAME }}/gitops-frontend=${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }}
+
+
+      # --------------------------------------------------
+      # 12. Update backend DEV image
+      # --------------------------------------------------
+      - name: Update backend DEV image
+        run: |
+          cd kubernetes/backend/overlays/dev
+
+          kustomize edit set image \
+            ${{ secrets.DOCKERHUB_USERNAME }}/backend=${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ github.sha }}
+
+
+      # --------------------------------------------------
+      # 13. Update backend PROD image
+      # --------------------------------------------------
+      - name: Update backend PROD image
+        run: |
+          cd kubernetes/backend/overlays/prod
+
+          kustomize edit set image \
+            ${{ secrets.DOCKERHUB_USERNAME }}/backend=${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ github.sha }}
+
+
+      # --------------------------------------------------
+      # 14. Validate Kubernetes manifests
+      # --------------------------------------------------
+      - name: Validate Kustomize manifests
+        run: |
+
+          echo "Validating frontend DEV..."
+          kubectl kustomize kubernetes/frontend/overlays/dev > /tmp/frontend-dev.yaml
+
+          echo "Validating frontend PROD..."
+          kubectl kustomize kubernetes/frontend/overlays/prod > /tmp/frontend-prod.yaml
+
+          echo "Validating backend DEV..."
+          kubectl kustomize kubernetes/backend/overlays/dev > /tmp/backend-dev.yaml
+
+          echo "Validating backend PROD..."
+          kubectl kustomize kubernetes/backend/overlays/prod > /tmp/backend-prod.yaml
+
+          echo "All Kustomize manifests generated successfully."
+
+
+      # --------------------------------------------------
+      # 15. Show changed files
+      # --------------------------------------------------
+      - name: Show Git changes
+        run: |
+          git status
+          git diff
+
+
+      # --------------------------------------------------
+      # 16. Commit updated Kubernetes manifests
+      # --------------------------------------------------
+      - name: Commit GitOps changes
+        run: |
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add kubernetes/
+
+          git diff --cached --quiet && \
+            echo "No Kubernetes changes to commit." || \
+            git commit -m "Update images to ${{ github.sha }}"
+
+
+      # --------------------------------------------------
+      # 17. Push updated manifests to GitHub
+      # --------------------------------------------------
+      - name: Push GitOps changes
+        run: |
+          git push

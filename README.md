@@ -18,7 +18,7 @@ Develop proficiency in deploying applications across multiple Kubernetes cluster
 
 **Steps**
 
-1.  **Setting Up Multi-Cluster Environment:**
+## 1.  **Setting Up Multi-Cluster Environment:**
 
     - **Configuring Multiple Kubernetes Clusters:**
 
@@ -44,8 +44,6 @@ eksctl create cluster \
   --nodegroup-name dev-workers \
   --node-type t3.medium \
   --nodes 2 \
-  --nodes-min 2 \
-  --nodes-max 4 \
   --managed
 ```
     Create the production cluster:
@@ -61,8 +59,6 @@ eksctl create cluster \
   --nodegroup-name prod-workers \
   --node-type t3.medium \
   --nodes 3 \
-  --nodes-min 3 \
-  --nodes-max 6 \
   --managed
 ```
 
@@ -89,7 +85,9 @@ argocd cluster add CONTEXT_NAME
 
 - Explanation: This command registers a Kubernetes cluster with ArgoCD. `CONTEXT_NAME` refers to the cluster's context name in your `kubeconfig` file, allowing ArgoCD to manage resources in that cluster.
 
-2. **Deploying Applications to Multiple Clusters:**
+*****************************************************************************************
+
+## 2. **Deploying Applications to Multiple Clusters:**
 
      - **Creating Application Definitions for Each Cluster:**
 
@@ -209,20 +207,15 @@ kubernetes/
 Below is the command to create the kubernetes directory above.
 
 ```
-mkdir -p kubernetes/base/frontend
-mkdir -p kubernetes/base/user-service
 
-mkdir -p kubernetes/overlays/dev/frontend
-mkdir -p kubernetes/overlays/dev/user-service
-
-mkdir -p kubernetes/overlays/prod/frontend
-mkdir -p kubernetes/overlays/prod/user-service
 ```
 
 ![The Image here shows the creation of kubernetes directories](image/kubernetes-directories.png)
 
 
-3. **Managing Microservices:**
+***************************************************************************************
+
+## 3. **Managing Microservices:**
 
     - **Structuring the Repository for Microservices:**
 
@@ -259,8 +252,10 @@ repository/
 
       - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
 
+**********************************************************************************
 
-**Lesson 5.2: Workshop: Building and Managing a CI/CD Pipeline Using ArgoCD**
+
+# **Lesson 5.2: Workshop: Building and Managing a CI/CD Pipeline Using ArgoCD**
 
 **Objective**
 
@@ -268,7 +263,7 @@ Learn to effectively integrate ArgoCD into a CI/CD pipeline, automating the depl
 
 **Steps**
 
-1. **Setting Up a CI/CD Pipeline:**
+## 1. **Setting Up a CI/CD Pipeline:**
 
    - **Choosing a CI Tool:**
 
@@ -301,7 +296,9 @@ jobs:
 - Explanation: This GitHub Actions workflow is triggered on Pushes to the main branch, builds a Docker image, and then pushes it to a container registry.
 
 
-2. **Integrate ArgoCD:**
+**************************************************************************************
+
+## 2. **Integrate ArgoCD:**
 
     - **Updating Kubernetes Manifests in CI Pipeline:** 
 
@@ -314,8 +311,9 @@ jobs:
 
     - Once ArgoCD detects changes in the Git repository, it will automatically synchronize and apply these changes to your Kubernetes clusters, deploying the updated application.
 
+*****************************************************************************************
 
-3. **Automation and Triggers:**
+## 3. **Automation and Triggers:**
 
     - Setting Up Webhook Triggers:
 
@@ -340,6 +338,8 @@ jobs:
 
       - [Webhook Configuration in ArgoCD](https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/)
 
+*****************************************************************************************
+*****************************************************************************************
 
 1.  Case Study Analysis:
 
