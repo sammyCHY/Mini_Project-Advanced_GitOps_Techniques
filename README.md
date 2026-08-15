@@ -213,7 +213,7 @@ Below is the command to create the kubernetes directory above.
 ![The Image here shows the creation of kubernetes directories](image/kubernetes-directories.png)
 
 
-***************************************************************************************
+*********************************************************************************************
 
 ## 3. **Managing Microservices:**
 
