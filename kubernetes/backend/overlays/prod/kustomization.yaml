@@ -4,8 +4,12 @@ kind: Kustomization
 namespace: backend-prod
 
 resources:
-  - ../../base
+- ../../base
 
 replicas:
-  - name: backend
-    count: 3
+- count: 3
+  name: backend
+images:
+- name: sammylin6525/backend
+  newName: sammylin6525/backend
+  newTag: 76d42b8f9e77c66757d6778d9685c1ea3cf02865

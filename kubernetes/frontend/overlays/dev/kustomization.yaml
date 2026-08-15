@@ -4,8 +4,12 @@ kind: Kustomization
 namespace: frontend-dev
 
 resources:
-  - ../../base
+- ../../base
 
 replicas:
-  - name: frontend
-    count: 2
+- count: 2
+  name: frontend
+images:
+- name: sammylin6525/frontend
+  newName: sammylin6525/frontend
+  newTag: 76d42b8f9e77c66757d6778d9685c1ea3cf02865
