@@ -110,34 +110,18 @@ jobs:
 
 
       # --------------------------------------------------
-      # 9. Install Kustomize
-      # --------------------------------------------------
-      - name: Install Kustomize
-        run: |
-          curl -sL \
-            https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_v5.7.1_linux_amd64.tar.gz \
-            -o kustomize.tar.gz
-
-          tar -xzf kustomize.tar.gz
-
-          sudo mv kustomize /usr/local/bin/kustomize
-
-          kustomize version
-
-
-      # --------------------------------------------------
-      # 10. Update frontend DEV image
+      # 9. Update frontend DEV image
       # --------------------------------------------------
       - name: Update frontend DEV image
         run: |
           cd kubernetes/frontend/overlays/dev
 
           kustomize edit set image \
-            ${{ secrets.DOCKERHUB_USERNAME }}/gitops-frontend=${{ secrets.DOCKERHUB_USERNAME }}/gitops-frontend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/frontend=${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }}
 
 
       # --------------------------------------------------
-      # 11. Update frontend PROD image
+      # 10. Update frontend PROD image
       # --------------------------------------------------
       - name: Update frontend PROD image
         run: |
@@ -148,7 +132,7 @@ jobs:
 
 
       # --------------------------------------------------
-      # 12. Update backend DEV image
+      # 11. Update backend DEV image
       # --------------------------------------------------
       - name: Update backend DEV image
         run: |
@@ -159,7 +143,7 @@ jobs:
 
 
       # --------------------------------------------------
-      # 13. Update backend PROD image
+      # 12. Update backend PROD image
       # --------------------------------------------------
       - name: Update backend PROD image
         run: |
@@ -170,7 +154,7 @@ jobs:
 
 
       # --------------------------------------------------
-      # 14. Validate Kubernetes manifests
+      # 13. Validate Kubernetes manifests
       # --------------------------------------------------
       - name: Validate Kustomize manifests
         run: |
@@ -191,7 +175,7 @@ jobs:
 
 
       # --------------------------------------------------
-      # 15. Show changed files
+      # 14. Show changed files
       # --------------------------------------------------
       - name: Show Git changes
         run: |
@@ -200,7 +184,7 @@ jobs:
 
 
       # --------------------------------------------------
-      # 16. Commit updated Kubernetes manifests
+      # 15. Commit updated Kubernetes manifests
       # --------------------------------------------------
       - name: Commit GitOps changes
         run: |
@@ -216,7 +200,7 @@ jobs:
 
 
       # --------------------------------------------------
-      # 17. Push updated manifests to GitHub
+      # 16. Push updated manifests to GitHub
       # --------------------------------------------------
       - name: Push GitOps changes
         run: |
