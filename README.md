@@ -219,9 +219,9 @@ repository/
 
   **Resources**
 
-    - [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
+    [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
 
-    - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
+    [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
 
 *******************************************************************************************
 
