@@ -12,4 +12,4 @@ replicas:
 images:
 - name: sammylin6525/backend
   newName: sammylin6525/backend
-  newTag: 3d2643a405985a7eedb1d98624afb3a6b72ea341
+  newTag: 9ad4d208d6c5d3150f298aaefc7e7a079757ccf3
