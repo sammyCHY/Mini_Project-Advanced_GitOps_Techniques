@@ -386,21 +386,21 @@ For instance, a case study might describe a financial institution's use of ArgoC
 
   **Repository Structure:**
 
-    - Emphasize the importance of a well-organized structure for GitOps.
+  - Emphasize the importance of a well-organized structure for GitOps.
 
-    - Discuss concepts like separating application manifests, environment-specific configurations, and shared components.
+  - Discuss concepts like separating application manifests, environment-specific configurations, and shared components.
 
     **Handling Secrets:**
 
-    - Address the challenges of managing secrets in GitOps.
+  - Address the challenges of managing secrets in GitOps.
 
-    - Introduce tools like [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) or [SOPS](https://github.com/getsops/sops) for secure secret management.
+  - Introduce tools like [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) or [SOPS](https://github.com/getsops/sops) for secure secret management.
 
   ### Multi-Environment Strategies:
 
-    - Explore strategies for managing applications in multiple environments (e.g., development, staging, production).
+  - Explore strategies for managing applications in multiple environments (e.g., development, staging, production).
 
-    - Discuss techniques for parameterizing configurations and maintaining consistency across environments.
+  - Discuss techniques for parameterizing configurations and maintaining consistency across environments.
 
 
 **Example:**
