@@ -382,9 +382,9 @@ For instance, a case study might describe a financial institution's use of ArgoC
 
 2. **Best Practices Discussion:**
 
-  **Steps:**
+  ### Steps:
 
-    **Repository Structure:**
+  **Repository Structure:**
 
     - Emphasize the importance of a well-organized structure for GitOps.
 
@@ -396,7 +396,7 @@ For instance, a case study might describe a financial institution's use of ArgoC
 
     - Introduce tools like [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) or [SOPS](https://github.com/getsops/sops) for secure secret management.
 
-  - Multi-Environment Strategies:
+  ### Multi-Environment Strategies:
 
     - Explore strategies for managing applications in multiple environments (e.g., development, staging, production).
 
