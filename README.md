@@ -26,17 +26,17 @@ Develop proficiency in deploying applications across multiple Kubernetes cluster
 
   - Environment each cluster is accessible and properly configured (with contexts set up in your `kubeconfig` file).
 
-  - **Registering Clusters with ArgoCD:**
+  **Registering Clusters with ArgoCD:**
 
   - Use the `argocd` CLI to add each Kubernetes cluster to ArgoCD's management.
 
-  - Code Snippet:
-     `winget install --id ArgoProj.ArgoCD`
+  - Code Snippet:  `winget install --id ArgoProj.ArgoCD`
 
-        There are several ways to create separate **Amazon EKS** clusters for **development** and **production**. The recommended approach is to create two **independent EKS clusters** one for each environment.
+    There are several ways to create separate **Amazon EKS** clusters for **development** and **production**. The recommended approach is to create two **independent EKS clusters** one for each environment.
 
-        In this task I prefer to use `eksctl` for this task.
+    In this task I prefer to use `eksctl` for this task.
     below is the command to create **development cluster**
+
 
 ```
 eksctl create cluster \
@@ -99,13 +99,13 @@ argocd cluster add CONTEXT_NAME
 
 ## 2. **Deploying Applications to Multiple Clusters:**
 
-  - **Creating Application Definitions for Each Cluster:**
+  **Creating Application Definitions for Each Cluster:**
 
-    - Define an ArgoCD application in YAML format for deployment in each cluster. These applications can point to the same or different Git repositories depending on your deployment strategy.
+  - Define an ArgoCD application in YAML format for deployment in each cluster. These applications can point to the same or different Git repositories depending on your deployment strategy.
 
-    - Customize applications for each cluster by using different namespaces, resource limits, or feature flags.
+  - Customize applications for each cluster by using different namespaces, resource limits, or feature flags.
 
-    - Example:
+  - Example:
 
 ```
 apiVersion: argoproj.io/v1alpha1
@@ -186,19 +186,19 @@ Below is the command to create the kubernetes directory above.
 
 *********************************************************************************************
 
-## 3. **Managing Microservices:**
+## 3. Managing Microservices:
 
-  - **Structuring the Repository for Microservices:**
+  **Structuring the Repository for Microservices:**
 
-    - Organize your Git repository to have a clear structure with separate directories or branches for each microservice.
+  - Organize your Git repository to have a clear structure with separate directories or branches for each microservice.
 
-    - This structure aids in managing and deploying microservices independently.
+  - This structure aids in managing and deploying microservices independently.
 
-- **Creating Separate ArgoCD Applications for Each Microservice:**
+**Creating Separate ArgoCD Applications for Each Microservice:**
     
-    - Define individual ArgoCD applications for each microservice. This allows you to manage the lifecycle of each microservice independently, facilitating updates, rollbacks, and scaling.
+  - Define individual ArgoCD applications for each microservice. This allows you to manage the lifecycle of each microservice independently, facilitating updates, rollbacks, and scaling.
 
-    - Example Structure:
+  - Example Structure:
 
 ```
 repository/
@@ -219,9 +219,9 @@ repository/
 
   **Resources**
 
-      - [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
+    - [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
 
-      - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
+    - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
 
 *******************************************************************************************
 
@@ -236,17 +236,18 @@ Learn to effectively integrate ArgoCD into a CI/CD pipeline, automating the depl
 
 ## 1. **Setting Up a CI/CD Pipeline:**
 
-   - **Choosing a CI Tool:**
+   **Choosing a CI Tool:**
 
-        - Select a Continuous Integration (CI) tool that aligns with your project's needs and existing infrastructure. Popular choices include Jenkins for its extensive Plugin ecosystem and GitHub Actions for its integration with GitHub repositories.
+  - Select a Continuous Integration (CI) tool that aligns with your project's needs and existing infrastructure. Popular choices include Jenkins for its extensive Plugin ecosystem and GitHub Actions for its integration with GitHub repositories.
 
-   - **Configuring the CI Pipeline:**
+  **Configuring the CI Pipeline:**
 
-       - Set up the CI pipeline to automate building your application. This typically involves compiling code, running tests, and building Docker images.
+    - Set up the CI pipeline to automate building your application. This typically involves compiling code, running tests, and building Docker images.
 
-       - Configure the Pipeline to push the built Docker image to a container registry (like Docker Hub or AWS ECR).
+    - Configure the Pipeline to push the built Docker image to a container registry (like Docker Hub or AWS ECR).
 
-       - Example using GitHub Actions:
+    - Example using GitHub Actions:
+
 
 ```
 name: Build and Push
@@ -271,16 +272,16 @@ jobs:
 
 ## 2. **Integrate ArgoCD:**
 
-  - **Updating Kubernetes Manifests in CI Pipeline:** 
+**Updating Kubernetes Manifests in CI Pipeline:** 
 
-      - After building and pushing the Docker image, update the Kubernetes manifests or Helm chart in your repository to reference the new image version. This step can be automated within the CI pipeline.
+  - After building and pushing the Docker image, update the Kubernetes manifests or Helm chart in your repository to reference the new image version. This step can be automated within the CI pipeline.
 
-        - ArgoCD, configured to monitor this repository, will delete these changes.
+  - ArgoCD, configured to monitor this repository, will delete these changes.
 
 
-- **Deploying Updated Application withArgoCD:**
+**Deploying Updated Application withArgoCD:**
 
-    - Once ArgoCD detects changes in the Git repository, it will automatically synchronize and apply these changes to your Kubernetes clusters, deploying the updated application.
+- Once ArgoCD detects changes in the Git repository, it will automatically synchronize and apply these changes to your Kubernetes clusters, deploying the updated application.
 
 
 ![The Image shows the deployment of running of the pods in namespace argocd](image/kubectl-get-pods-argocd.png)
@@ -296,9 +297,10 @@ jobs:
 
   - This ensures that any changes (like Updated Docker image tags in deployment manifests) automatically initiates an ArgoCD sync, keeping the Kubernetes environment up-to-date with the repository.
 
-  - **Configuring ArgoCD for Auto-Sync:**
 
-  - Enable auto-sync in ArgoCD for continuous deployment whenever the repository changes.
+**Configuring ArgoCD for Auto-Sync:**
+
+- Enable auto-sync in ArgoCD for continuous deployment whenever the repository changes.
 
 Here is the process of port-forwarding ArgoCD so that the UI web can be accessed locally.
 
@@ -337,9 +339,9 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 **Additional Best Practices**
 
-   - **Review and Approval Process:** Implement a review and approval process in your CI/CD pipeline for changes going into production environments.
+- **Review and Approval Process:** Implement a review and approval process in your CI/CD pipeline for changes going into production environments.
 
-    - **Rollback Strategies:** Ensure your pipeline supports quick rollbacks in case of deployment failures.
+- **Rollback Strategies:** Ensure your pipeline supports quick rollbacks in case of deployment failures.
 
    **Resources**
 
