@@ -219,9 +219,9 @@ repository/
 
   **Resources**
 
-    [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
+    - [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
 
-    [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
+    - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
 
 *******************************************************************************************
 
@@ -300,7 +300,7 @@ jobs:
 
 **Configuring ArgoCD for Auto-Sync:**
 
-- Enable auto-sync in ArgoCD for continuous deployment whenever the repository changes.
+  - Enable auto-sync in ArgoCD for continuous deployment whenever the repository changes.
 
 Here is the process of port-forwarding ArgoCD so that the UI web can be accessed locally.
 
@@ -339,9 +339,9 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 **Additional Best Practices**
 
-- **Review and Approval Process:** Implement a review and approval process in your CI/CD pipeline for changes going into production environments.
+   - **Review and Approval Process:** Implement a review and approval process in your CI/CD pipeline for changes going into production environments.
 
-- **Rollback Strategies:** Ensure your pipeline supports quick rollbacks in case of deployment failures.
+    - **Rollback Strategies:** Ensure your pipeline supports quick rollbacks in case of deployment failures.
 
    **Resources**
 
@@ -390,11 +390,11 @@ For instance, a case study might describe a financial institution's use of ArgoC
 
         - Discuss concepts like separating application manifests, environment-specific configurations, and shared components.
 
-    - **Handling Secrets:**
+    **Handling Secrets:**
 
-        - Address the challenges of managing secrets in GitOps.
+    - Address the challenges of managing secrets in GitOps.
 
-        - Introduce tools like [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) or [SOPS](https://github.com/getsops/sops) for secure secret management.
+    - Introduce tools like [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) or [SOPS](https://github.com/getsops/sops) for secure secret management.
 
 - Multi-Environment Strategies:
 
