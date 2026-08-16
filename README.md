@@ -366,7 +366,7 @@ Real-world case studies provide valuable insights into how organizations impleme
 
    - Select a few case studies relevant to the learners' interests or industry.
 
-   - **Focus Areas:**
+   ### Focus Areas:
 
     - Examine the architecture of each case study. Look for how ArgoCD is integrated into the organization's CI/CD Pipeline.
 
