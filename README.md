@@ -219,9 +219,9 @@ repository/
 
   **Resources**
 
-    - [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
+  - [ArgoCD Multi-Cluster Deployment](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
 
-    - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
+  - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
 
 *******************************************************************************************
 
@@ -242,11 +242,11 @@ Learn to effectively integrate ArgoCD into a CI/CD pipeline, automating the depl
 
   **Configuring the CI Pipeline:**
 
-    - Set up the CI pipeline to automate building your application. This typically involves compiling code, running tests, and building Docker images.
+  - Set up the CI pipeline to automate building your application. This typically involves compiling code, running tests, and building Docker images.
 
-    - Configure the Pipeline to push the built Docker image to a container registry (like Docker Hub or AWS ECR).
+  - Configure the Pipeline to push the built Docker image to a container registry (like Docker Hub or AWS ECR).
 
-    - Example using GitHub Actions:
+  - Example using GitHub Actions:
 
 
 ```
