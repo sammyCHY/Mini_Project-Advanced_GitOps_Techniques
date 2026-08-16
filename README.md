@@ -368,11 +368,11 @@ Real-world case studies provide valuable insights into how organizations impleme
 
    ### Focus Areas:
 
-    - Examine the architecture of each case study. Look for how ArgoCD is integrated into the organization's CI/CD Pipeline.
+   - Examine the architecture of each case study. Look for how ArgoCD is integrated into the organization's CI/CD Pipeline.
 
-    - Identify challenges faced by the organizations and how ArgoCD addressed those challenges.
+   - Identify challenges faced by the organizations and how ArgoCD addressed those challenges.
 
-    - Understand the scale of deployment, whether it's a single cluster or a multi-cluster environment.
+   - Understand the scale of deployment, whether it's a single cluster or a multi-cluster environment.
 
 
 **Example:**
