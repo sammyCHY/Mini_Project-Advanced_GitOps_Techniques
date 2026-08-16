@@ -13,7 +13,7 @@ spec:
     path: kubernetes/backend/overlays/dev
 
   destination:
-    name: dev-cluster
+    name: cluster-dev
     namespace: backend-dev
 
   syncPolicy:

@@ -13,7 +13,7 @@ spec:
     path: kubernetes/frontend/overlays/prod
 
   destination:
-    name: prod-cluster
+    name: cluster-prod
     namespace: frontend-prod
 
   syncPolicy:

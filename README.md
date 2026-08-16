@@ -31,6 +31,7 @@ Develop proficiency in deploying applications across multiple Kubernetes cluster
      - Use the `argocd` CLI to add each Kubernetes cluster to ArgoCD's management.
 
      - Code Snippet:
+     `winget install --id ArgoProj.ArgoCD`
 
         There are several ways to create separate **Amazon EKS** clusters for **development** and **production**. The recommended approach is to create two **independent EKS clusters** one for each environment.
 
@@ -79,9 +80,19 @@ eksctl get clusters
 ![The Image shows the kubectl config get-contexts](image/kubectl-config-get-contexts.png)
 
 
+![The Image shows the kubectl config get-contexts](image/kubectl-config-get-contexts.png)
+
 ```
 argocd cluster add CONTEXT_NAME
 ```
+
+![The Image shows the addition of the clusters context to the argocd](image/add-clusters-to-argocd.png)
+
+
+![The Image shows the addition of the clusters context to the argocd](image/cloud-dev-prod-argocd.png)
+
+
+![The Image shows the addition of the clusters context to the argocd](image/added-successfully.png)
 
 - Explanation: This command registers a Kubernetes cluster with ArgoCD. `CONTEXT_NAME` refers to the cluster's context name in your `kubeconfig` file, allowing ArgoCD to manage resources in that cluster.
 
@@ -321,6 +332,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 
 ![The Image shows the final application deployment in the argocd](image/final-application-deployment3.png)
+
+![The Image shows the final application deployment in the argocd](image/final-application-deployment4.png)
 
 
 **Additional Best Practices**
