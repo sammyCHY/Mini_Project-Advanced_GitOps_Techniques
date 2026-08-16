@@ -115,100 +115,61 @@ spec:
 ```
 
 
-    Here is the structure for this project.
+After the deployment of eks-clusters, argocd have to be installed the cluster's but before then argocd namespace has to be created.
+
+1. Create the `argocd` namespace
 
 ```
-    gitops-project/
-│
-├── application/
-│   ├── frontend/
-│   │   ├── Dockerfile
-│   │   ├── package.json
-│   │   ├── server.js
-│   │   └── .dockerignore
-│   │
-│   └── user-service/
-│       ├── Dockerfile
-│       ├── package.json
-│       ├── server.js
-│       └── .dockerignore
-│
-├── kubernetes/
-│   ├── frontend/
-│   │   ├── deployment.yaml
-│   │   ├── service.yaml
-│   │   ├── configmap.yaml
-│   │   ├── namespace.yaml
-│   │   └── kustomization.yaml
-│   │
-│   └── user-service/
-│       ├── deployment.yaml
-│       ├── service.yaml
-│       ├── configmap.yaml
-│       ├── namespace.yaml
-│       └── kustomization.yaml
-│
-├── argocd/
-│   ├── frontend-app.yaml
-│   ├── user-app.yaml
-│   └── project.yaml
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-│
-└── README.md
+kubectl create namespace argocd
 ```
+![The Image shows argocd namespace created](image/argocd-namespace-created.png)
+
+then, verify the with
+
+```
+kubectl get namespace argocd
+```
+
+Then, Install argo cd by running the command below:
+
+```
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+![The Image shows the argocd installed the clusters ](image/argocd-installed1.png)
+
+![The Image shows the argocd installed the clusters ](image/argocd-installed2.png)
+
+Then after the installation process above, then proceed with the command below to apply those applications.
+
+```
+kubectl apply -f argocd/frontend-dev.yaml
+```
+
+```
+kubectl apply -f argocd/backend-dev.yaml
+```
+
+```
+kubectl apply -f argocd/frontend-prod.yaml
+```
+
+```
+kubectl apply -f argocd/backend-prod.yaml
+```
+
+![The Image here shows the application deployment process](image/argocd-application-deployment.png)
+
+Here is the structure for this project.
+
 
    - Explanation: This defines an ArgoCD application for a production environment, pointing to the `prod` directory in the Git Repository.
 
 After the first stage based of the project structure, below is the next stage, the directory structure will look like this:
 
-```
-kubernetes/
-│
-├── base/
-│   ├── frontend/
-│   │   ├── deployment.yaml
-│   │   ├── service.yaml
-│   │   ├── configmap.yaml
-│   │   └── kustomization.yaml
-│   │
-│   └── user-service/
-│       ├── deployment.yaml
-│       ├── service.yaml
-│       ├── configmap.yaml
-│       └── kustomization.yaml
-│
-└── overlays/
-    ├── dev/
-    │   ├── frontend/
-    │   │   ├── kustomization.yaml
-    │   │   ├── replica-patch.yaml
-    │   │   └── image-patch.yaml
-    │   │
-    │   └── user-service/
-    │       ├── kustomization.yaml
-    │       ├── replica-patch.yaml
-    │       └── image-patch.yaml
-    │
-    └── prod/
-        ├── frontend/
-        │   ├── kustomization.yaml
-        │   ├── replica-patch.yaml
-        │   └── image-patch.yaml
-        │
-        └── user-service/
-            ├── kustomization.yaml
-            ├── replica-patch.yaml
-            └── image-patch.yaml
-```
 
 Below is the command to create the kubernetes directory above.
 
-```
-
-```
 
 ![The Image here shows the creation of kubernetes directories](image/kubernetes-directories.png)
 
@@ -311,6 +272,10 @@ jobs:
 
     - Once ArgoCD detects changes in the Git repository, it will automatically synchronize and apply these changes to your Kubernetes clusters, deploying the updated application.
 
+
+![The Image shows the deployment of running of the pods in namespace argocd](image/kubectl-get-pods-argocd.png)
+
+
 *****************************************************************************************
 
 ## 3. **Automation and Triggers:**
@@ -324,6 +289,38 @@ jobs:
     - **Configuring ArgoCD for Auto-Sync:**
 
         - Enable auto-sync in ArgoCD for continuous deployment whenever the repository changes.
+
+Here is the process of port-forwarding ArgoCD so that the UI web can be accessed locally.
+
+```
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+Then, Open this below in a browser
+
+```
+https://localhost:8080
+```
+
+![Here is the image showing the access to the argocd via the localhost](image/localhost.png)
+
+
+Get the Initial ArgoCD `admin` password
+
+```
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+```
+
+![The Image shows the argocd initial password gen](image/argocd-password-gen.png)
+
+
+![The Image shows the final application deployment in the argocd](image/final-application-deployment1.png)
+
+![The Image shows the final application deployment in the argocd](image/final-application-deployment2.png)
+
+
+![The Image shows the final application deployment in the argocd](image/final-application-deployment3.png)
 
 
 **Additional Best Practices**
