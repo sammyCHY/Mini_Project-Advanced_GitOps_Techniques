@@ -397,3 +397,5 @@ A best practice could be organizing the Git repository into folders such as `app
 **Additional Resources:**
 
    - Learners can refer to [GitOps Best Practices](https://ambking1234.biz/?action=register&marketingRef=6788b227da9499f55f6ea745) for additional insights and guidelines on GitOps best practices.
+
+Here is the final stage if this episode
