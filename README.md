@@ -317,7 +317,7 @@ https://localhost:8080
 ![Here is the image showing the access to the argocd via the localhost](image/localhost.png)
 
 
-Get the Initial ArgoCD `admin` password
+### Get the Initial ArgoCD `admin` password
 
 ```
 kubectl -n argocd get secret argocd-initial-admin-secret \
@@ -339,15 +339,15 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 **Additional Best Practices**
 
-   - **Review and Approval Process:** Implement a review and approval process in your CI/CD pipeline for changes going into production environments.
+- **Review and Approval Process:** Implement a review and approval process in your CI/CD pipeline for changes going into production environments.
 
-    - **Rollback Strategies:** Ensure your pipeline supports quick rollbacks in case of deployment failures.
+- **Rollback Strategies:** Ensure your pipeline supports quick rollbacks in case of deployment failures.
 
-   **Resources**
+**Resources**
 
-      - [CI/CD Integration with ArgoCD](https://argo-cd.readthedocs.io/en/stable/operator-manual/ci_cd_integration/)
+[CI/CD Integration with ArgoCD](https://argo-cd.readthedocs.io/en/stable/operator-manual/ci_cd_integration/)
 
-      - [Webhook Configuration in ArgoCD](https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/)
+[Webhook Configuration in ArgoCD](https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/)
  
 *************************************************************************************************************
 
@@ -384,11 +384,11 @@ For instance, a case study might describe a financial institution's use of ArgoC
 
   **Steps:**
 
-    - **Repository Structure:**
+    **Repository Structure:**
 
-        - Emphasize the importance of a well-organized structure for GitOps.
+    - Emphasize the importance of a well-organized structure for GitOps.
 
-        - Discuss concepts like separating application manifests, environment-specific configurations, and shared components.
+    - Discuss concepts like separating application manifests, environment-specific configurations, and shared components.
 
     **Handling Secrets:**
 
@@ -396,7 +396,7 @@ For instance, a case study might describe a financial institution's use of ArgoC
 
     - Introduce tools like [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) or [SOPS](https://github.com/getsops/sops) for secure secret management.
 
-- Multi-Environment Strategies:
+  - Multi-Environment Strategies:
 
     - Explore strategies for managing applications in multiple environments (e.g., development, staging, production).
 
