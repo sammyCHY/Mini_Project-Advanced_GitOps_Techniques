@@ -20,23 +20,24 @@ Develop proficiency in deploying applications across multiple Kubernetes cluster
 
 ## 1.  **Setting Up Multi-Cluster Environment:**
 
-    - **Configuring Multiple Kubernetes Clusters:**
+  **Configuring Multiple Kubernetes Clusters:**
 
-        - Set up distinct Kubernetes environments. This could involve creating multiple clusters on AWS EKS for a more realistic production setup, or using minikube for a simplified local development environment.
+  - Set up distinct Kubernetes environments. This could involve creating multiple clusters on AWS EKS for a more realistic production setup, or using minikube for a simplified local development environment.
 
-        - Environment each cluster is accessible and properly configured (with contexts set up in your `kubeconfig` file).
+  - Environment each cluster is accessible and properly configured (with contexts set up in your `kubeconfig` file).
 
   - **Registering Clusters with ArgoCD:**
 
-     - Use the `argocd` CLI to add each Kubernetes cluster to ArgoCD's management.
+  - Use the `argocd` CLI to add each Kubernetes cluster to ArgoCD's management.
 
-     - Code Snippet:
+  - Code Snippet:
      `winget install --id ArgoProj.ArgoCD`
 
         There are several ways to create separate **Amazon EKS** clusters for **development** and **production**. The recommended approach is to create two **independent EKS clusters** one for each environment.
 
         In this task I prefer to use `eksctl` for this task.
     below is the command to create **development cluster**
+
 ```
 eksctl create cluster \
   --name dev-cluster \
@@ -47,7 +48,8 @@ eksctl create cluster \
   --nodes 2 \
   --managed
 ```
-    Create the production cluster:
+    
+**Create the production cluster:**
 
 ![The Image here shows the creation of dev-cluster on amazon eks](image/dev-cluster.png)
 
@@ -72,13 +74,9 @@ Use this command below to verify the creation of the two clusters.
 eksctl get clusters
 ```
 
-
 ![The Image shows the creation of clusters](image/eksctl-get-clusters.png)
 
-
-
 ![The Image shows the kubectl config get-contexts](image/kubectl-config-get-contexts.png)
-
 
 ![The Image shows the kubectl config get-contexts](image/kubectl-config-get-contexts.png)
 
@@ -96,17 +94,18 @@ argocd cluster add CONTEXT_NAME
 
 - Explanation: This command registers a Kubernetes cluster with ArgoCD. `CONTEXT_NAME` refers to the cluster's context name in your `kubeconfig` file, allowing ArgoCD to manage resources in that cluster.
 
+
 *****************************************************************************************
 
 ## 2. **Deploying Applications to Multiple Clusters:**
 
-     - **Creating Application Definitions for Each Cluster:**
+  - **Creating Application Definitions for Each Cluster:**
 
-        - Define an ArgoCD application in YAML format for deployment in each cluster. These applications can point to the same or different Git repositories depending on your deployment strategy.
+    - Define an ArgoCD application in YAML format for deployment in each cluster. These applications can point to the same or different Git repositories depending on your deployment strategy.
 
-        - Customize applications for each cluster by using different namespaces, resource limits, or feature flags.
+    - Customize applications for each cluster by using different namespaces, resource limits, or feature flags.
 
-        - Example:
+    - Example:
 
 ```
 apiVersion: argoproj.io/v1alpha1
@@ -135,7 +134,7 @@ kubectl create namespace argocd
 ```
 ![The Image shows argocd namespace created](image/argocd-namespace-created.png)
 
-then, verify the with
+Then, verify the with
 
 ```
 kubectl get namespace argocd
@@ -174,7 +173,7 @@ kubectl apply -f argocd/backend-prod.yaml
 Here is the structure for this project.
 
 
-   - Explanation: This defines an ArgoCD application for a production environment, pointing to the `prod` directory in the Git Repository.
+- Explanation: This defines an ArgoCD application for a production environment, pointing to the `prod` directory in the Git Repository.
 
 After the first stage based of the project structure, below is the next stage, the directory structure will look like this:
 
@@ -189,11 +188,11 @@ Below is the command to create the kubernetes directory above.
 
 ## 3. **Managing Microservices:**
 
-    - **Structuring the Repository for Microservices:**
+  - **Structuring the Repository for Microservices:**
 
-        - Organize your Git repository to have a clear structure with separate directories or branches for each microservice.
+    - Organize your Git repository to have a clear structure with separate directories or branches for each microservice.
 
-        - This structure aids in managing and deploying microservices independently.
+    - This structure aids in managing and deploying microservices independently.
 
 - **Creating Separate ArgoCD Applications for Each Microservice:**
     
@@ -209,7 +208,7 @@ repository/
 ├── microservice-2/
 │   ├── deployment.yaml
 │   └── service.yaml
-└── ...
+└── 
 ```
 
   **Additional Considerations**
@@ -224,10 +223,10 @@ repository/
 
       - [Microservices with Kubernetes](https://kubernetes.io/blog/2021/07/23/microservices-on-kubernetes/)
 
-**********************************************************************************
+*******************************************************************************************
 
 
-# **Lesson 5.2: Workshop: Building and Managing a CI/CD Pipeline Using ArgoCD**
+# Lesson 5.2: Workshop: Building and Managing a CI/CD Pipeline Using ArgoCD
 
 **Objective**
 
@@ -272,9 +271,9 @@ jobs:
 
 ## 2. **Integrate ArgoCD:**
 
-    - **Updating Kubernetes Manifests in CI Pipeline:** 
+  - **Updating Kubernetes Manifests in CI Pipeline:** 
 
-        - After building and pushing the Docker image, update the Kubernetes manifests or Helm chart in your repository to reference the new image version. This step can be automated within the CI pipeline.
+      - After building and pushing the Docker image, update the Kubernetes manifests or Helm chart in your repository to reference the new image version. This step can be automated within the CI pipeline.
 
         - ArgoCD, configured to monitor this repository, will delete these changes.
 
@@ -287,19 +286,19 @@ jobs:
 ![The Image shows the deployment of running of the pods in namespace argocd](image/kubectl-get-pods-argocd.png)
 
 
-*****************************************************************************************
+*********************************************************************************************
 
 ## 3. **Automation and Triggers:**
 
-    - Setting Up Webhook Triggers:
+  - Setting Up Webhook Triggers:
 
-        - Configure webhooks in ArgoCD to trigger automatic synchronization when there are changes in the monitored Git repository.
+  - Configure webhooks in ArgoCD to trigger automatic synchronization when there are changes in the monitored Git repository.
 
-        - This ensures that any changes (like Updated Docker image tags in deployment manifests) automatically initiates an ArgoCD sync, keeping the Kubernetes environment up-to-date with the repository.
+  - This ensures that any changes (like Updated Docker image tags in deployment manifests) automatically initiates an ArgoCD sync, keeping the Kubernetes environment up-to-date with the repository.
 
-    - **Configuring ArgoCD for Auto-Sync:**
+  - **Configuring ArgoCD for Auto-Sync:**
 
-        - Enable auto-sync in ArgoCD for continuous deployment whenever the repository changes.
+  - Enable auto-sync in ArgoCD for continuous deployment whenever the repository changes.
 
 Here is the process of port-forwarding ArgoCD so that the UI web can be accessed locally.
 
@@ -347,9 +346,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
       - [CI/CD Integration with ArgoCD](https://argo-cd.readthedocs.io/en/stable/operator-manual/ci_cd_integration/)
 
       - [Webhook Configuration in ArgoCD](https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/)
-
-*****************************************************************************************
-*****************************************************************************************
+ 
+*************************************************************************************************************
 
 1.  Case Study Analysis:
 
@@ -362,9 +360,9 @@ Real-world case studies provide valuable insights into how organizations impleme
 
    - **Reviewing Case Studies:** 
 
-      - Visit the [ArgoCD Case Studies](https://argo-cd.readthedocs.io/en/stable/case-studies/) page to find a variety of case studies.
+   - Visit the [ArgoCD Case Studies](https://argo-cd.readthedocs.io/en/stable/case-studies/) page to find a variety of case studies.
 
-      - Select a few case studies relevant to the learners' interests or industry.
+   - Select a few case studies relevant to the learners' interests or industry.
 
    - **Focus Areas:**
 
@@ -411,4 +409,4 @@ A best practice could be organizing the Git repository into folders such as `app
 
    - Learners can refer to [GitOps Best Practices](https://ambking1234.biz/?action=register&marketingRef=6788b227da9499f55f6ea745) for additional insights and guidelines on GitOps best practices.
 
-Here is the final stage if this episode
+ 
